@@ -3,8 +3,14 @@
 import { BsGithub, BsGoogle } from 'react-icons/bs';
 
 import AuthSocialButton from '../AuthSocialButton';
+import { signIn } from 'next-auth/react';
 
 const SocialIcons = () => {
+  const onClick = (provider: 'google' | 'github') => {
+    signIn(provider, {
+      callbackUrl: '/login',
+    });
+  };
   return (
     <div className='mt-6'>
       <div className='relative'>
@@ -16,8 +22,13 @@ const SocialIcons = () => {
         </div>
       </div>
       <div className='mt-6 flex gap-2'>
-        <AuthSocialButton icon={BsGithub} onClick={() => {}} />
-        <AuthSocialButton icon={BsGoogle} onClick={() => {}} />
+        <AuthSocialButton
+          icon={BsGithub}
+          onClick={() => {
+            onClick('github');
+          }}
+        />
+        <AuthSocialButton icon={BsGoogle} onClick={() => onClick('google')} />
       </div>
     </div>
   );

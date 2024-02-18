@@ -16,6 +16,10 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '../ui/button';
+import { useState, useTransition } from 'react';
+import { register } from '@/actions/register';
+import FormError from '../ui/form-error';
+import FormSucces from '../ui/form-success';
 
 interface RegisterFormProps {
   variant: string;
@@ -23,6 +27,10 @@ interface RegisterFormProps {
 }
 
 const RegisterForm = ({ variant, toggleVariant }: RegisterFormProps) => {
+  const [error, setError] = useState<string | undefined>('');
+  const [success, setSuccess] = useState<string | undefined>('');
+  const [isPending, startTransition] = useTransition();
+
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -33,6 +41,16 @@ const RegisterForm = ({ variant, toggleVariant }: RegisterFormProps) => {
   });
 
   const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
+    setError('');
+    setSuccess('');
+
+    startTransition(() => {
+      register(values).then((data) => {
+        setError(data.error);
+        setSuccess(data.success);
+      });
+    });
+
     form.reset();
     // do action for register
   };
@@ -50,6 +68,7 @@ const RegisterForm = ({ variant, toggleVariant }: RegisterFormProps) => {
               <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input
+                  disabled={isPending}
                   placeholder='example@example.com'
                   {...field}
                   type='email'
@@ -69,7 +88,12 @@ const RegisterForm = ({ variant, toggleVariant }: RegisterFormProps) => {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder='ex:John Doe' {...field} type='text' />
+                <Input
+                  placeholder='ex:John Doe'
+                  {...field}
+                  type='text'
+                  disabled={isPending}
+                />
               </FormControl>
               <FormDescription>
                 This is your public display name.
@@ -85,7 +109,12 @@ const RegisterForm = ({ variant, toggleVariant }: RegisterFormProps) => {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input placeholder='******' {...field} type='password' />
+                <Input
+                  placeholder='******'
+                  {...field}
+                  type='password'
+                  disabled={isPending}
+                />
               </FormControl>
               <FormDescription>
                 This is your public display name.
@@ -94,7 +123,9 @@ const RegisterForm = ({ variant, toggleVariant }: RegisterFormProps) => {
             </FormItem>
           )}
         />
-        <Button className='w-full' type='submit'>
+        {error && <FormError message={error} />}
+        {success && <FormSucces message={success} />}
+        <Button className='w-full' type='submit' disabled={isPending}>
           Submit
         </Button>
       </form>

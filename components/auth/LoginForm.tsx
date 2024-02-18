@@ -16,16 +16,25 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '../ui/button';
-import SocialIcons from '../ui/socialIcons';
+import { login } from '@/actions/login';
+import { useState, useTransition } from 'react';
 
-interface RegisterFormProps {
+import SocialIcons from '../ui/socialIcons';
+import FormError from '../ui/form-error';
+import FormSucces from '../ui/form-success';
+
+interface LoginFormFormProps {
   variant: string;
   toggleVariant: () => void;
 }
 
-const RegisterForm = ({ variant, toggleVariant }: RegisterFormProps) => {
+const LoginForm = ({ variant, toggleVariant }: LoginFormFormProps) => {
+  const [error, setError] = useState<string | undefined>('');
+  const [success, setSuccess] = useState<string | undefined>('');
+  const [isPending, startTransition] = useTransition();
+
   const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(RegisterSchema),
+    resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: '',
       password: '',
@@ -33,6 +42,14 @@ const RegisterForm = ({ variant, toggleVariant }: RegisterFormProps) => {
   });
 
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+    setError('');
+    setSuccess('');
+    startTransition(() => {
+      login(values).then((data) => {
+        setError(data?.error);
+        setSuccess(data.success);
+      });
+    });
     form.reset();
     // do action for register
   };
@@ -50,6 +67,7 @@ const RegisterForm = ({ variant, toggleVariant }: RegisterFormProps) => {
               <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input
+                  disabled={isPending}
                   placeholder='example@example.com'
                   {...field}
                   type='email'
@@ -70,7 +88,12 @@ const RegisterForm = ({ variant, toggleVariant }: RegisterFormProps) => {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input placeholder='******' {...field} type='password' />
+                <Input
+                  placeholder='******'
+                  {...field}
+                  type='password'
+                  disabled={isPending}
+                />
               </FormControl>
               <FormDescription>
                 This is your public display name.
@@ -79,7 +102,9 @@ const RegisterForm = ({ variant, toggleVariant }: RegisterFormProps) => {
             </FormItem>
           )}
         />
-        <Button className='w-full' type='submit'>
+        {error && <FormError message={error} />}
+        {success && <FormSucces message={success} />}
+        <Button className='w-full' type='submit' disabled={isPending}>
           Sign in
         </Button>
 
@@ -95,4 +120,4 @@ const RegisterForm = ({ variant, toggleVariant }: RegisterFormProps) => {
   );
 };
 
-export default RegisterForm;
+export default LoginForm;
