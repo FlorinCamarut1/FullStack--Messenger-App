@@ -18,15 +18,13 @@ import { Input } from '@/components/ui/input';
 import { Button } from '../ui/button';
 import { useState, useTransition } from 'react';
 import { register } from '@/actions/register';
+import { useVariant } from '@/context/variant-context';
+
 import FormError from '../ui/form-error';
 import FormSucces from '../ui/form-success';
 
-interface RegisterFormProps {
-  variant: string;
-  toggleVariant: () => void;
-}
-
-const RegisterForm = ({ variant, toggleVariant }: RegisterFormProps) => {
+const RegisterForm = () => {
+  const { variant, toggleVariant } = useVariant();
   const [error, setError] = useState<string | undefined>('');
   const [success, setSuccess] = useState<string | undefined>('');
   const [isPending, startTransition] = useTransition();
