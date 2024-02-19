@@ -18,17 +18,14 @@ import { Input } from '@/components/ui/input';
 import { Button } from '../ui/button';
 import { login } from '@/actions/login';
 import { useState, useTransition } from 'react';
+import { useVariant } from '@/context/variant-context';
 
 import SocialIcons from '../ui/socialIcons';
 import FormError from '../ui/form-error';
 import FormSucces from '../ui/form-success';
 
-interface LoginFormFormProps {
-  variant: string;
-  toggleVariant: () => void;
-}
-
-const LoginForm = ({ variant, toggleVariant }: LoginFormFormProps) => {
+const LoginForm = () => {
+  const { variant, toggleVariant } = useVariant();
   const [error, setError] = useState<string | undefined>('');
   const [success, setSuccess] = useState<string | undefined>('');
   const [isPending, startTransition] = useTransition();
