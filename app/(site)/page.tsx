@@ -1,5 +1,5 @@
 'use client';
-import AuthForm from '@/components/AuthForm';
+import AuthForm from '@/components/auth/AuthForm';
 import { VariantProvider, useVariant } from '@/context/variant-context';
 import Image from 'next/image';
 import React from 'react';
