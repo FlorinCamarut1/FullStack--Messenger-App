@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import * as z from 'zod';
+import * as z from "zod";
 
-import { useForm } from 'react-hook-form';
-import { RegisterSchema } from '@/schemas';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from "react-hook-form";
+import { RegisterSchema } from "@/schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
@@ -13,39 +13,39 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Button } from '../ui/button';
-import { useState, useTransition } from 'react';
-import { register } from '@/actions/register';
-import { useVariant } from '@/context/variant-context';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "../ui/button";
+import { useState, useTransition } from "react";
+import { register } from "@/actions/register";
+import { useVariant } from "@/context/variant-context";
 
-import FormError from '../ui/form-error';
-import FormSucces from '../ui/form-success';
+import FormError from "../ui/form-error";
+import FormSucces from "../ui/form-success";
 
 const RegisterForm = () => {
   const { variant, toggleVariant } = useVariant();
-  const [error, setError] = useState<string | undefined>('');
-  const [success, setSuccess] = useState<string | undefined>('');
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
-      name: '',
-      email: '',
-      password: '',
+      name: "",
+      email: "",
+      password: "",
     },
   });
 
   const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
-    setError('');
-    setSuccess('');
+    setError("");
+    setSuccess("");
 
     startTransition(() => {
       register(values).then((data) => {
-        setError(data.error);
-        setSuccess(data.success);
+        setError(data?.error);
+        setSuccess(data?.success);
       });
     });
 
@@ -53,23 +53,23 @@ const RegisterForm = () => {
     // do action for register
   };
 
-  if (variant !== 'REGISTER') return null;
+  if (variant !== "REGISTER") return null;
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name='email'
+          name="email"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input
                   disabled={isPending}
-                  placeholder='example@example.com'
+                  placeholder="example@example.com"
                   {...field}
-                  type='email'
+                  type="email"
                 />
               </FormControl>
               <FormDescription>
@@ -81,15 +81,15 @@ const RegisterForm = () => {
         />
         <FormField
           control={form.control}
-          name='name'
+          name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
                 <Input
-                  placeholder='ex:John Doe'
+                  placeholder="ex:John Doe"
                   {...field}
-                  type='text'
+                  type="text"
                   disabled={isPending}
                 />
               </FormControl>
@@ -102,15 +102,15 @@ const RegisterForm = () => {
         />
         <FormField
           control={form.control}
-          name='password'
+          name="password"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input
-                  placeholder='******'
+                  placeholder="******"
                   {...field}
-                  type='password'
+                  type="password"
                   disabled={isPending}
                 />
               </FormControl>
@@ -123,13 +123,13 @@ const RegisterForm = () => {
         />
         {error && <FormError message={error} />}
         {success && <FormSucces message={success} />}
-        <Button className='w-full' type='submit' disabled={isPending}>
+        <Button className="w-full" type="submit" disabled={isPending}>
           Submit
         </Button>
       </form>
-      <p className='text-sm py-4 text-neutral-500 text-center'>
-        Alredy have an accoun?{' '}
-        <button className='text-black font-bold' onClick={toggleVariant}>
+      <p className="py-4 text-center text-sm text-neutral-500">
+        Alredy have an accoun?{" "}
+        <button className="font-bold text-black" onClick={toggleVariant}>
           Login now
         </button>
       </p>

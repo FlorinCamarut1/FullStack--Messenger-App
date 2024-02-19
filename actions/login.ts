@@ -6,6 +6,7 @@ import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 
 import * as z from 'zod';
+import { DEFAULT_LOGIN_ROUTE } from '@/Routes';
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
   const validatedFields = LoginSchema.safeParse(values);
@@ -23,7 +24,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     await signIn('credentials', {
       email,
       password,
-      redirectTo: '/login',
+      redirectTo: DEFAULT_LOGIN_ROUTE,
     });
     return { success: 'Logged in succesfully!' };
   } catch (error) {
