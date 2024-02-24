@@ -83,7 +83,7 @@ const ConversationBox = ({ data, selected }: ConversationBoxProps) => {
           <p
             className={clsx(
               ` truncate text-sm`,
-              hasSeen ? "text-gray-500" : "text-gray-900",
+              hasSeen ? "text-gray-500" : " text-gray-900",
             )}
           >
             {lastMessageText}

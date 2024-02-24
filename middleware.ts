@@ -10,7 +10,7 @@ export default auth((req) => {
 
   const isAuthRoute = AUTH_ROUTES.includes(nextUrl.pathname);
 
-  if (isAuthRoute && !isLoggedIn) {
+  if (!isLoggedIn) {
     let callbackUrl = nextUrl.pathname;
     if (nextUrl.search) {
       callbackUrl += nextUrl.search;
@@ -23,5 +23,5 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: ["/users/:path*"],
+  matcher: ["/users/:path*", "/conversations/:path*"],
 };
