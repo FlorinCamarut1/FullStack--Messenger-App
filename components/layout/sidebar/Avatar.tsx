@@ -15,6 +15,7 @@ const Avatar = ({ user }: AvatarProps) => {
       <div className="relative inline-block h-9 w-9 overflow-hidden rounded-full md:h-11 md:w-11">
         <Image
           alt="Avatar"
+          className=" h-full w-full object-cover"
           src={user?.image || "/images/placeholder.png"}
           width={100}
           height={100}

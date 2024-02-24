@@ -28,7 +28,7 @@ const ConversationPage = async ({ params }: { params: IParams }) => {
     <div className="h-screen lg:pl-80">
       <div className="flex h-full flex-col">
         <Header conversation={conversations} />
-        <Body />
+        <Body initialMessages={messages!} />
         <ConversationForm />
       </div>
     </div>

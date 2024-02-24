@@ -23,3 +23,8 @@ export const LoginSchema = z.object({
 export const MessageSchema = z.object({
   message: z.string().min(1),
 });
+
+export const SettingsSchema = z.object({
+  name: z.string().optional(),
+  image: z.any().optional(),
+});
