@@ -46,15 +46,15 @@ export async function POST(request: Request, { params }: { params: IParams }) {
       data: {
         seen: {
           connect: {
-            id: currentUser.id,
+            id: currentUser?.id,
           },
         },
       },
     });
 
-    return Response.json(updatedMessage);
+    return Response.json(updatedMessage, { status: 200 });
   } catch (error) {
     console.log(error);
-    return new Error("Internal error!");
+    return Response.json({ error: "Internal error!" }, { status: 500 });
   }
 }
