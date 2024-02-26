@@ -2,11 +2,9 @@
 
 import { auth } from "@/auth";
 import db from "@/lib/db";
-import { error } from "console";
-import { NextResponse } from "next/server";
 
 export const startConversation = async (body: {
-  userId: string;
+  userId?: string;
   isGroup?: boolean;
   members?: Record<string, any>;
   name?: string;
@@ -55,12 +53,12 @@ export const startConversation = async (body: {
         OR: [
           {
             userIds: {
-              equals: [currentUser.id, userId],
+              equals: [currentUser.id, userId as string],
             },
           },
           {
             userIds: {
-              equals: [userId, currentUser.id],
+              equals: [userId as string, currentUser.id],
             },
           },
         ],

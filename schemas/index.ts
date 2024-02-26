@@ -28,3 +28,10 @@ export const SettingsSchema = z.object({
   name: z.string().optional(),
   image: z.any().optional(),
 });
+
+export const GroupChatSchema = z.object({
+  userId: z.string().optional(),
+  name: z.string().optional(),
+  members: z.array(z.any().nullish()).optional(),
+  isGroup: z.boolean().optional(),
+});
