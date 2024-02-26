@@ -3,8 +3,10 @@
 import { User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useCallback, useState, useTransition } from "react";
-import Avatar from "../layout/sidebar/Avatar";
 import { startConversation } from "@/actions/startConversation";
+
+import Avatar from "../layout/sidebar/Avatar";
+import LoadingModal from "../ui/LoadingModal";
 
 interface UserBoxProps {
   data: User;
@@ -26,9 +28,11 @@ const UserBox = ({ data }: UserBoxProps) => {
   }, [router, data.id]);
 
   return (
-    <div
-      onClick={handleClick}
-      className="  relative 
+    <>
+      {isPending && <LoadingModal />}
+      <div
+        onClick={handleClick}
+        className="  relative 
       flex 
       w-full 
       cursor-pointer 
@@ -39,16 +43,17 @@ const UserBox = ({ data }: UserBoxProps) => {
       p-3
       transition
       hover:bg-neutral-100"
-    >
-      <Avatar user={data} />
-      <div className="min-w-0 flex-1">
-        <div className="focus:outline-none">
-          <div className="mb-1 flex items-center justify-between">
-            <p className="text-sm font-medium text-gray-900">{data.name}</p>
+      >
+        <Avatar user={data} />
+        <div className="min-w-0 flex-1">
+          <div className="focus:outline-none">
+            <div className="mb-1 flex items-center justify-between">
+              <p className="text-sm font-medium text-gray-900">{data.name}</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

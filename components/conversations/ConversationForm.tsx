@@ -15,6 +15,7 @@ import { CldUploadButton } from "next-cloudinary";
 
 import * as z from "zod";
 import { uploadImage } from "@/actions/uploadImage";
+import LoadingModal from "../ui/LoadingModal";
 
 const ConversationForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -62,47 +63,49 @@ const ConversationForm = () => {
   };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className=" flex w-full items-center justify-center gap-2 border-t  bg-white px-4 py-4 lg:gap-4"
-      >
-        <CldUploadButton
-          options={{ maxFiles: 1 }}
-          onUpload={handleUpload}
-          uploadPreset="stlfcouv"
+    <>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className=" flex w-full items-center justify-center gap-2 border-t  bg-white px-4 py-4 lg:gap-4"
         >
-          <HiPhoto size={30} className="text-sky-500" />
-        </CldUploadButton>
-        <FormField
-          disabled={isPending}
-          control={form.control}
-          name="message"
-          render={({ field }) => (
-            <FormItem className="w-full">
-              <FormControl>
-                <Input
-                  className="rounded-full bg-neutral-100"
-                  disabled={isPending}
-                  placeholder="type a message..."
-                  {...field}
-                  type="text"
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        {messageLength && (
-          <button
-            className="rounded-full p-2 text-sky-500 transition hover:scale-125 hover:bg-neutral-100 active:scale-75"
-            type="submit"
-            disabled={isPending}
+          <CldUploadButton
+            options={{ maxFiles: 1 }}
+            onUpload={handleUpload}
+            uploadPreset="stlfcouv"
           >
-            <PiPaperPlaneTiltFill size={30} />
-          </button>
-        )}
-      </form>
-    </Form>
+            <HiPhoto size={30} className="text-sky-500" />
+          </CldUploadButton>
+          <FormField
+            disabled={isPending}
+            control={form.control}
+            name="message"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormControl>
+                  <Input
+                    className="rounded-full bg-neutral-100"
+                    disabled={isPending}
+                    placeholder="type a message..."
+                    {...field}
+                    type="text"
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          {messageLength && (
+            <button
+              className="rounded-full p-2 text-sky-500 transition hover:scale-125 hover:bg-neutral-100 active:scale-75"
+              type="submit"
+              disabled={isPending}
+            >
+              <PiPaperPlaneTiltFill size={30} />
+            </button>
+          )}
+        </form>
+      </Form>
+    </>
   );
 };
 
