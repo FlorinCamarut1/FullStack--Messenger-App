@@ -7,7 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import { FullConversationType } from "@/types";
 import { useSession } from "next-auth/react";
 import { pusherClient } from "@/lib/pusher";
-import { curry, find } from "lodash";
+import { find } from "lodash";
 
 import clsx from "clsx";
 import ConversationBox from "./ConversationBox";
@@ -73,6 +73,13 @@ const ConversationList = ({ initialItems, users }: ConversationListProps) => {
     pusherClient.bind("conversation:update", updateHandler);
     pusherClient.bind("conversation:new", newHandler);
     pusherClient.bind("conversation:remove", removeHandler);
+
+    return () => {
+      pusherClient.unbind("conversation:update", updateHandler);
+      pusherClient.unbind("conversation:new", newHandler);
+      pusherClient.unbind("conversation:remove", removeHandler);
+      pusherClient.unsubscribe(pusherKey);
+    };
   }, [pusherKey, router]);
 
   return (
