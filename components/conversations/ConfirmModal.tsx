@@ -29,6 +29,7 @@ const ConfirmModal = ({ isOpen, onClose }: ConfirmModalProps) => {
       } else if (data?.success) {
         toast({ description: data?.success });
         router.push("/conversations");
+        router.refresh();
       }
       onClose();
     });
