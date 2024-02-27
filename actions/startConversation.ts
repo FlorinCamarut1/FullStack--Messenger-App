@@ -45,13 +45,13 @@ export const startConversation = async (body: {
         },
       });
 
-      newConversation.users.forEach((user) => {
+      const pusherConversation = newConversation.users.forEach((user) => {
         if (user.email) {
           pusherServer.trigger(user.email, "conversation:new", newConversation);
         }
       });
 
-      return newConversation;
+      return pusherConversation;
     }
     /**
      * for single conversation

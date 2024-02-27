@@ -34,7 +34,7 @@ export const uploadImage = async (image: any, conversationId: string) => {
       },
     });
 
-    await pusherServer.trigger(conversationId, "photo:new", uploadedImage);
+    await pusherServer.trigger(conversationId, "messages:new", uploadedImage);
 
     return uploadedImage;
   } catch (err) {
