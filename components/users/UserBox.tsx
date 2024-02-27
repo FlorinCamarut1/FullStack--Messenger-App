@@ -1,6 +1,6 @@
 "use client";
 
-import { User } from "@prisma/client";
+import { Conversation, User } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useCallback, useState, useTransition } from "react";
 import { startConversation } from "@/actions/startConversation";
@@ -13,13 +13,14 @@ interface UserBoxProps {
 }
 const UserBox = ({ data }: UserBoxProps) => {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+
   const [isPending, startTransition] = useTransition();
 
   const handleClick = useCallback(() => {
     startTransition(() => {
-      startConversation({ userId: data.id });
-      router.push(`/conversations/${data.id}`);
+      startConversation({ userId: data.id }).then((data: any) => {
+        router.push(`/conversations/${data?.id}`);
+      });
     });
 
     // axios.post('/api/conversations',{
