@@ -2,6 +2,7 @@
 
 import db from "@/lib/db";
 import { getCurrentUser } from "./getCurrentUser";
+import { pusherServer } from "@/lib/pusher";
 
 export const deleteConversation = async (conversationId: string) => {
   try {
@@ -32,6 +33,17 @@ export const deleteConversation = async (conversationId: string) => {
         },
       },
     });
+
+    existingConversation.users.forEach((user) => {
+      if (user.email) {
+        pusherServer.trigger(
+          user.email,
+          "conversation:remove",
+          existingConversation,
+        );
+      }
+    });
+
     return { success: "Conversation deleted!" };
   } catch (error) {
     console.log(error);

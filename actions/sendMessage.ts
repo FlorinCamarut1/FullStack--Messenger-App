@@ -1,11 +1,12 @@
 "use server";
+
 import { auth } from "@/auth";
 import { MessageSchema } from "@/schemas";
+import { pusherServer } from "@/lib/pusher";
 
 import db from "@/lib/db";
 
 import * as z from "zod";
-
 
 export const sendMessage = async (
   values: z.infer<typeof MessageSchema>,
@@ -18,7 +19,7 @@ export const sendMessage = async (
 
   if (!validatedFields.success) return { error: "Invalid field!" };
 
-  const { message } = validatedFields.data;
+  const { message, image } = validatedFields.data;
 
   if (!currentUser?.id || !currentUser.email) {
     return { error: "Unauthorized" };
@@ -27,7 +28,7 @@ export const sendMessage = async (
   const newMessage = await db.message.create({
     data: {
       body: message,
-      image: null,
+      image: image,
       conversation: {
         connect: {
           id: conversationId,
@@ -71,6 +72,18 @@ export const sendMessage = async (
       },
     },
   });
+
+  await pusherServer.trigger(conversationId, "messages:new", newMessage);
+
+  const lastMessage =
+    updatedConversation.messages[updatedConversation.messages.length];
+
+  updatedConversation.users.map((user) =>
+    pusherServer.trigger(user.email!, "conversation:update", {
+      id: conversationId,
+      message: [lastMessage],
+    }),
+  );
 
   return { success: "Message sent!", newMessage };
 };

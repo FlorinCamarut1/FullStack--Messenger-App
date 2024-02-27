@@ -13,6 +13,7 @@ export const {
   signOut,
 } = NextAuth({
   adapter: PrismaAdapter(prisma),
+
   callbacks: {
     async signIn({ user, account }) {
       if (account?.provider !== "credentials") return true;
