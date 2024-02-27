@@ -12,7 +12,7 @@ interface AvatarProps {
 
 const Avatar = ({ user }: AvatarProps) => {
   const session = useSession();
-  const isActive = session.data?.user?.id === user?.id;
+  const isActive = session.status === "authenticated";
 
   return (
     <div className="relative">

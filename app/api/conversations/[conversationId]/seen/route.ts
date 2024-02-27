@@ -37,7 +37,7 @@ export async function POST(request: Request, { params }: { params: IParams }) {
 
     if (!lastMessage) return Response.json(conversation);
 
-    const updatedMessage = await prisma?.message.update({
+    const updatedMessage = await db.message.update({
       where: {
         id: lastMessage.id,
       },
