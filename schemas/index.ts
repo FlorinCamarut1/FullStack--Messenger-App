@@ -22,6 +22,7 @@ export const LoginSchema = z.object({
 
 export const MessageSchema = z.object({
   message: z.string().min(1),
+  image: z.string().optional(),
 });
 
 export const SettingsSchema = z.object({

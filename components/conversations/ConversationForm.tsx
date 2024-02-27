@@ -15,7 +15,6 @@ import { CldUploadButton } from "next-cloudinary";
 
 import * as z from "zod";
 import { uploadImage } from "@/actions/uploadImage";
-import LoadingModal from "../ui/LoadingModal";
 
 const ConversationForm = () => {
   const [isPending, startTransition] = useTransition();

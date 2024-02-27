@@ -23,6 +23,7 @@ const LoadingModal = () => {
           height: 400,
           borderRadius: "10px",
           border: "1px solid white",
+          borderColor: "white",
           backgroundColor: "white",
           justifyContent: "center",
           alignItems: "center",

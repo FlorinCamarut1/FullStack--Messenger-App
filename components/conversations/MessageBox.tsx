@@ -60,6 +60,7 @@ const MessageBox = ({ data, isLast }: MessageBoxProps) => {
               // onClick={() => setImageModalOpen(true)}
               src={data.image}
               className="
+              
               translate
               priority
               h-auto 

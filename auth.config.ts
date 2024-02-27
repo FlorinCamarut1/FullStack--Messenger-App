@@ -1,11 +1,11 @@
-import { LoginSchema } from './schemas';
-import { getUserByEmail } from './data';
-import type { NextAuthConfig } from 'next-auth';
+import { LoginSchema } from "./schemas";
+import { getUserByEmail } from "./data";
+import type { NextAuthConfig } from "next-auth";
 
-import bcrypt from 'bcryptjs';
-import Credentials from 'next-auth/providers/credentials';
-import Google from 'next-auth/providers/google';
-import Github from 'next-auth/providers/github';
+import bcrypt from "bcryptjs";
+import Credentials from "next-auth/providers/credentials";
+import Google from "next-auth/providers/google";
+import Github from "next-auth/providers/github";
 
 export default {
   providers: [
@@ -30,9 +30,9 @@ export default {
 
           const passwordMatch = await bcrypt.compare(
             password,
-            user.hashedPassword
+            user.hashedPassword,
           );
-          if (!passwordMatch) throw new Error('Invalid password');
+          if (!passwordMatch) throw new Error("Invalid password");
           if (passwordMatch) return user;
         }
         return null;

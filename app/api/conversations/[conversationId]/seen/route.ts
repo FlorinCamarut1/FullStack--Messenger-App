@@ -1,6 +1,8 @@
 import { getCurrentUser } from "@/actions/getCurrentUser";
 
 import db from "@/lib/db";
+import { pusherServer } from "@/lib/pusher";
+import { NextResponse } from "next/server";
 
 interface IParams {
   conversationId?: string;
@@ -52,7 +54,22 @@ export async function POST(request: Request, { params }: { params: IParams }) {
       },
     });
 
-    return Response.json(updatedMessage, { status: 200 });
+    await pusherServer.trigger(currentUser.email, "conversation:update", {
+      id: conversationId,
+      messages: [updatedMessage],
+    });
+
+    if (lastMessage.senderId.indexOf(currentUser.id) !== -1) {
+      return NextResponse.json(conversation);
+    }
+
+    await pusherServer.trigger(
+      conversationId!,
+      "message:update",
+      updatedMessage,
+    );
+
+    return NextResponse.json(updatedMessage);
   } catch (error) {
     console.log(error);
     return Response.json({ error: "Internal error!" }, { status: 500 });

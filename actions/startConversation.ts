@@ -2,6 +2,7 @@
 
 import { auth } from "@/auth";
 import db from "@/lib/db";
+import { pusherServer } from "@/lib/pusher";
 
 export const startConversation = async (body: {
   userId?: string;
@@ -43,6 +44,13 @@ export const startConversation = async (body: {
           users: true,
         },
       });
+
+      newConversation.users.forEach((user) => {
+        if (user.email) {
+          pusherServer.trigger(user.email, "conversation:new", newConversation);
+        }
+      });
+
       return newConversation;
     }
     /**
@@ -85,6 +93,12 @@ export const startConversation = async (body: {
       include: {
         users: true,
       },
+    });
+
+    newConversation?.users.map((user) => {
+      if (user.email) {
+        pusherServer.trigger(user.email, "conversation:new", newConversation);
+      }
     });
 
     return newConversation;
