@@ -7,7 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import { FullConversationType } from "@/types";
 import { useSession } from "next-auth/react";
 import { pusherClient } from "@/lib/pusher";
-import { find } from "lodash";
+import { curry, find } from "lodash";
 
 import clsx from "clsx";
 import ConversationBox from "./ConversationBox";
@@ -67,6 +67,7 @@ const ConversationList = ({ initialItems, users }: ConversationListProps) => {
       setItems((current) => {
         return [...current.filter((convo) => convo.id !== conversation.id)];
       });
+      return conversation;
     };
 
     pusherClient.bind("conversation:update", updateHandler);
