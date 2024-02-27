@@ -6,7 +6,7 @@ import { pusherServer } from "@/lib/pusher";
 import db from "@/lib/db";
 
 export const startConversation = async (body: {
-  userId: string;
+  userId?: string;
   isGroup?: boolean;
   members?: Record<string, any>;
   name?: string;
