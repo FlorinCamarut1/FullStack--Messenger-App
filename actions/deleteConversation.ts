@@ -25,7 +25,7 @@ export const deleteConversation = async (conversationId: string) => {
       return { error: "Invalid conversation!" };
     }
 
-    await db.conversation.deleteMany({
+    const deleteConversation = await db.conversation.deleteMany({
       where: {
         id: conversationId,
         userIds: {
@@ -44,7 +44,7 @@ export const deleteConversation = async (conversationId: string) => {
       }
     });
 
-    return { success: "Conversation deleted!" };
+    return { success: "Conversation deleted!", deleteConversation };
   } catch (error) {
     console.log(error);
     return { error: "ERROR_CONVERSATION DELETION!" };
