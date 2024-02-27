@@ -52,25 +52,13 @@ const Body = ({ initialMessages }: BodyProps) => {
       );
     };
 
-    const updatePhoto = (message: FullMessageType) => {
-      setMessages((current) => {
-        if (find(current, { id: message.id })) {
-          return current;
-        }
-        return [...current, message];
-      });
-      bottomRef?.current?.scrollIntoView();
-    };
-
     pusherClient.bind("messages:new", messageHandler);
     pusherClient.bind("message:update", updateMessageHandler);
-    pusherClient.bind("photo:new", updatePhoto);
 
     return () => {
       pusherClient.unsubscribe(conversationId);
       pusherClient.unbind("messages:new", messageHandler);
       pusherClient.unbind("message:update", updateMessageHandler);
-      pusherClient.unbind("photo:new", updatePhoto);
     };
   }, [conversationId]);
 
