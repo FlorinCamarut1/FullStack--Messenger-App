@@ -44,7 +44,7 @@ export const deleteConversation = async (conversationId: string) => {
       }
     });
 
-    return { success: "Conversation deleted!" };
+    return { success: "Conversation deleted!", existingConversation };
   } catch (error) {
     console.log(error);
     return { error: "ERROR_CONVERSATION DELETION!" };
