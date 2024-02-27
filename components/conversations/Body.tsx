@@ -59,6 +59,7 @@ const Body = ({ initialMessages }: BodyProps) => {
         }
         return [...current, message];
       });
+      bottomRef?.current?.scrollIntoView();
     };
 
     pusherClient.bind("messages:new", messageHandler);
