@@ -3,6 +3,7 @@ import { getUsers } from "@/actions/getUsers";
 
 import ConversationList from "@/components/conversations/ConversationList";
 import Sidebar from "@/components/layout/sidebar/Sidebar";
+import { useEffect } from "react";
 
 interface ConversationsLayoutProps {
   children: React.ReactNode;

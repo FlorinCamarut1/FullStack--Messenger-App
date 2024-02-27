@@ -35,9 +35,7 @@ const ConversationList = ({ initialItems, users }: ConversationListProps) => {
     if (!pusherKey) {
       return;
     }
-
     pusherClient.subscribe(pusherKey);
-
     const updateHandler = (conversation: FullConversationType) => {
       setItems((current) =>
         current.map((currentConversation) => {
@@ -59,13 +57,13 @@ const ConversationList = ({ initialItems, users }: ConversationListProps) => {
           return current;
         }
 
-        return [conversation, ...current];
+        return [...current, conversation];
       });
     };
 
     const removeHandler = (conversation: FullConversationType) => {
       setItems((current) => {
-        return [...current.filter((convo) => convo.id !== conversation.id)];
+        return current.filter((convo) => convo.id !== conversation.id);
       });
       return conversation;
     };

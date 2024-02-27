@@ -56,6 +56,7 @@ const GroupChatModal = ({ isOpen, onClose, users }: GroupChatModalProps) => {
           });
         }
         toast({ description: "Group created Succesfully!" });
+        router.refresh();
         onClose();
       });
     });

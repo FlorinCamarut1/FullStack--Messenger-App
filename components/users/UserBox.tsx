@@ -20,6 +20,7 @@ const UserBox = ({ data }: UserBoxProps) => {
     startTransition(() => {
       startConversation({ userId: data.id }).then((data: any) => {
         router.push(`/conversations/${data?.id}`);
+        router.refresh();
       });
     });
 
