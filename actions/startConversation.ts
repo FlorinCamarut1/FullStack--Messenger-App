@@ -1,8 +1,9 @@
 "use server";
 
 import { auth } from "@/auth";
-import db from "@/lib/db";
 import { pusherServer } from "@/lib/pusher";
+
+import db from "@/lib/db";
 
 export const startConversation = async (body: {
   userId?: string;
@@ -45,13 +46,13 @@ export const startConversation = async (body: {
         },
       });
 
-      const pusherConversation = newConversation.users.forEach((user) => {
+      newConversation.users.forEach((user) => {
         if (user.email) {
           pusherServer.trigger(user.email, "conversation:new", newConversation);
         }
       });
 
-      return pusherConversation;
+      return newConversation;
     }
     /**
      * for single conversation
@@ -79,7 +80,7 @@ export const startConversation = async (body: {
       return singleConversation;
     }
 
-    const newConversation = await prisma?.conversation.create({
+    const newConversation = await db.conversation.create({
       data: {
         users: {
           connect: [
