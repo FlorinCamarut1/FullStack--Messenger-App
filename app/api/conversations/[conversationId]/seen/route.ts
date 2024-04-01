@@ -1,8 +1,8 @@
-import { getCurrentUser } from "@/actions/getCurrentUser";
-
-import db from "@/lib/db";
-import { pusherServer } from "@/lib/pusher";
 import { NextResponse } from "next/server";
+
+import { getCurrentUser } from "@/actions/getCurrentUser";
+import { pusherServer } from "@/lib/pusher";
+import db from "@/lib/db";
 
 interface IParams {
   conversationId?: string;
@@ -14,9 +14,10 @@ export async function POST(request: Request, { params }: { params: IParams }) {
     const { conversationId } = params;
 
     if (!currentUser?.id || !currentUser?.email) {
-      return Response.json("Unauthorized", { status: 401 });
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
+    // Find existing conversation
     const conversation = await db.conversation.findUnique({
       where: {
         id: conversationId,
@@ -31,12 +32,18 @@ export async function POST(request: Request, { params }: { params: IParams }) {
       },
     });
 
-    if (!conversation) return Response.json("Invalid ID", { status: 400 });
+    if (!conversation) {
+      return new NextResponse("Invalid ID", { status: 400 });
+    }
 
+    // Find last message
     const lastMessage = conversation.messages[conversation.messages.length - 1];
 
-    if (!lastMessage) return Response.json(conversation);
+    if (!lastMessage) {
+      return NextResponse.json(conversation);
+    }
 
+    // Update seen of last message
     const updatedMessage = await db.message.update({
       where: {
         id: lastMessage.id,
@@ -48,30 +55,33 @@ export async function POST(request: Request, { params }: { params: IParams }) {
       data: {
         seen: {
           connect: {
-            id: currentUser?.id,
+            id: currentUser.id,
           },
         },
       },
     });
 
+    // Update all connections with new seen
     await pusherServer.trigger(currentUser.email, "conversation:update", {
       id: conversationId,
       messages: [updatedMessage],
     });
 
-    if (lastMessage.senderId.indexOf(currentUser.id) !== -1) {
+    // If user has already seen the message, no need to go further
+    if (lastMessage.seenIds.indexOf(currentUser.id) !== -1) {
       return NextResponse.json(conversation);
     }
 
+    // Update last message seen
     await pusherServer.trigger(
       conversationId!,
       "message:update",
       updatedMessage,
     );
 
-    return NextResponse.json(updatedMessage);
+    return new NextResponse("Success");
   } catch (error) {
-    console.log(error);
-    return Response.json({ error: "Internal error!" }, { status: 500 });
+    console.log(error, "ERROR_MESSAGES_SEEN");
+    return new NextResponse("Error", { status: 500 });
   }
 }
