@@ -32,6 +32,22 @@ Here are some screenshots demonstrating the login process and the app layout:
 Login Page
 ](public/images/demo/1.png)
 
+### Conversation Pages
+
+![
+Conversation Page
+](public/images/demo/2.png)
+![
+Conversation Page
+](public/images/demo/3.png)
+
+### Fully responsive
+
+Conversation Page
+![
+Conversation Page
+](public/images/demo/4.png)
+
 ## Installation
 
 1. Clone the repository:
