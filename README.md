@@ -30,7 +30,7 @@ Here are some screenshots demonstrating the login process and the app layout:
 
 ![
 Login Page
-](./images/demo/1.png)
+](public/images/demo/1.png)
 
 ## Installation
 
