@@ -16,7 +16,7 @@ Messenger App is a messaging platform where users can create accounts, sign in w
 - **Backend:** Node.js, prismaDB
 - **Database:** MongoDB
 - **Authentication:** OAuth (Google, GitHub)
-- **Image Storage:** Cloudinary (or any other cloud storage service)
+- **Image Storage:** Cloudinary
 
 ## Deployment
 
@@ -30,7 +30,7 @@ Here are some screenshots demonstrating the login process and the app layout:
 
 ![
 Login Page
-](images/demo/1.png)
+](./images/demo/1.png)
 
 ## Installation
 
